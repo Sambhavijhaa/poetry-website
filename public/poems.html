@@ -367,9 +367,20 @@ function logout() {
 /* ================= LOAD POEMS ================= */
 
 async function loadPoems() {
-  const res = await fetch(API);
-  poems = await res.json();
-  applyFilters();
+  try {
+    const res = await fetch("/api/poems");
+
+    if (!res.ok) {
+      throw new Error("API error: " + res.status);
+    }
+
+    poems = await res.json();
+    console.log("POEMS LOADED:", poems);
+
+    applyFilters();
+  } catch (err) {
+    console.error("LOAD ERROR:", err);
+  }
 }
 
 /* ================= FILTER ================= */
@@ -424,14 +435,12 @@ function render(list) {
 
         <div style="margin-top:10px;">
 
-          ${p.comments?.map(c => `
-            <div class="comment">
-              <b>${(c.user && typeof c.user === "object")
-                ? (c.user.name || c.user.email)
-                : "User"}:</b>
-              ${escapeHTML(c.text)}
-            </div>
-          `).join("") || ""}
+         ${p.comments?.map(c => `
+          <div class="comment">
+           <b>${c.user?.name || "User"}:</b>
+           ${escapeHTML(c.text || "")}
+          </div>
+        `).join("") || ""}
 
           <input class="comment-input" id="c-${p._id}" placeholder="Add comment">
           <button onclick="addComment('${p._id}')">Comment</button>
