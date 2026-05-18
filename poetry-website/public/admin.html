@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Poetry Admin Panel</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  background: #1E1E1E;
+  color: #F5F5F5;
+  padding: 20px;
+}
+
+h1, h2 { color: #F5F5F5; }
+
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0 10px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #2C2C2C;
+  color: #fff;
+}
+
+button {
+  padding: 6px 12px;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  background: #2C2C2C;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+button:hover { background: #3A3A3A; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #444;
+  padding: 8px;
+  vertical-align: top;
+}
+
+th { background: #2C2C2C; }
+
+.section {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #444;
+}
+
+.card {
+  background: #2C2C2C;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Poetry Admin Panel</h1>
+
+<h2>Add / Edit Poem</h2>
+
+<form id="poemForm">
+  <input type="hidden" id="poemId">
+
+  <label>Title</label>
+  <input id="title" required>
+
+  <label>Content</label>
+  <textarea id="content" required></textarea>
+
+  <button type="submit">Save</button>
+  <button type="button" onclick="resetForm()">Cancel</button>
+</form>
+
+<h2>All Poems</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Content</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody id="poemTable"></tbody>
+</table>
+
+<div class="section">
+  <h2>Logged-in Users</h2>
+  <div id="users"></div>
+</div>
+
+<div class="section">
+  <h2>Poem Activity (Likes & Comments)</h2>
+  <div id="activity"></div>
+</div>
+
+<script>
+
+const API = "/api";
+
+/* ================= TOKEN ================= */
+function getToken() {
+  const params = new URLSearchParams(window.location.search);
+  const urlToken = params.get("token");
+
+  if (urlToken) {
+    localStorage.setItem("token", urlToken);
+    return urlToken;
+  }
+
+  return localStorage.getItem("token");
+}
+
+const token = getToken();
+
+/* ================= ADMIN SAFETY CHECK ================= */
+
+function parseToken(token) {
+  try {
+    return JSON.parse(atob(token.split(".")[1]));
+  } catch {
+    return null;
+  }
+}
+
+if (!token) {
+  alert("Please login first");
+  window.location.href = "login.html";
+}
+
+const userData = parseToken(token);
+
+if (!userData || userData.email !== "sambhavi.jha10@gmail.com") {
+  alert("Admin access only");
+  window.location.href = "poems.html";
+}
+
+/* ================= DOM ELEMENTS ================= */
+const poemId = document.getElementById("poemId");
+const title = document.getElementById("title");
+const content = document.getElementById("content");
+
+/* ================= LOAD USERS ================= */
+async function loadUsers() {
+  try {
+    const res = await fetch(`${API}/users`, {
+      headers: { Authorization: "Bearer " + token }
+    });
+
+    const data = await res.json();
+
+    // 🚨 IMPORTANT SAFETY CHECK
+    if (!res.ok) {
+      console.log("Users API error:", data.message);
+      document.getElementById("users").innerHTML =
+        `<p style="color:red;">${data.message}</p>`;
+      return;
+    }
+
+    if (!Array.isArray(data)) {
+      console.log("Invalid users response:", data);
+      return;
+    }
+
+    document.getElementById("users").innerHTML =
+      data.map(u => `
+        <div class="card">
+          👤 ${u.name || "No name"}<br>
+          📧 ${u.email || "No email"}
+        </div>
+      `).join("");
+
+  } catch (err) {
+    console.log("Users error:", err);
+  }
+}
+
+/* ================= LOAD POEMS ================= */
+async function loadPoems() {
+  try {
+    const res = await fetch(`${API}/poems`);
+    const poems = await res.json();
+
+    const table = document.getElementById("poemTable");
+    const activity = document.getElementById("activity");
+
+    table.innerHTML = "";
+    activity.innerHTML = "";
+
+    poems.forEach(p => {
+
+      /* TABLE */
+      table.innerHTML += `
+        <tr>
+          <td>${p.title}</td>
+          <td>${p.content.substring(0, 80)}...</td>
+          <td>
+            <button onclick="editPoem('${p._id}')">Edit</button>
+            <button onclick="deletePoem('${p._id}')">Delete</button>
+          </td>
+        </tr>
+      `;
+
+      /* ACTIVITY */
+      const likes = p.likes || [];
+      const comments = p.comments || [];
+
+      activity.innerHTML += `
+        <div class="card">
+          <h3>${p.title}</h3>
+
+          <b>❤️ Likes (${likes.length})</b><br>
+          ${
+            likes.length
+              ? likes.map(l => `❤️ ${l.name || l.email || "User"}`).join("<br>")
+              : "No likes"
+          }
+
+          <br><br>
+
+          <b>💬 Comments (${comments.length})</b><br>
+          ${
+            comments.length
+              ? comments.map(c => `
+                  👤 ${c.user?.name || c.user?.email || "User"}<br>
+                  ${c.text}<br>
+                  <button onclick="deleteComment('${p._id}','${c._id}')">Delete</button>
+                  <hr>
+                `).join("")
+              : "No comments"
+          }
+        </div>
+      `;
+    });
+
+  } catch (err) {
+    console.log("Poems error:", err);
+  }
+}
+
+/* ================= SAVE / UPDATE ================= */
+document.getElementById("poemForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const id = poemId.value;
+
+  const url = id
+    ? `${API}/poems/${id}`
+    : `${API}/poems`;
+
+  const method = id ? "PUT" : "POST";
+
+  const res = await fetch(url, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({
+      title: title.value,
+      content: content.value
+    })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.message || "Error");
+    return;
+  }
+
+  resetForm();
+  loadPoems();
+});
+
+/* ================= EDIT ================= */
+async function editPoem(id) {
+  const res = await fetch(`${API}/poems`);
+  const poems = await res.json();
+
+  const poem = poems.find(p => p._id === id);
+
+  poemId.value = poem._id;
+  title.value = poem.title;
+  content.value = poem.content;
+}
+
+/* ================= DELETE POEM ================= */
+async function deletePoem(id) {
+  await fetch(`${API}/poems/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  loadPoems();
+}
+
+/* ================= DELETE COMMENT ================= */
+async function deleteComment(poemIdVal, commentId) {
+  await fetch(`${API}/poems/${poemIdVal}/comment/${commentId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  loadPoems();
+}
+
+/* ================= RESET ================= */
+function resetForm() {
+  poemId.value = "";
+  title.value = "";
+  content.value = "";
+}
+
+/* ================= INIT ================= */
+loadPoems();
+loadUsers();
+
+</script>
+
+</body>
+</html>

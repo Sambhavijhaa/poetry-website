@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>About · Unsaid by Heart</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Libre+Baskerville&display=swap" rel="stylesheet">
+
+<style>
+
+/* RESET */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Libre Baskerville', serif;
+  background:#F7EDE4;
+  color:#3E2F2F;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  min-height:100vh;
+  padding:20px;
+
+  transition:0.3s ease;
+}
+
+/* BOX */
+.about-box{
+  max-width:750px;
+  background:#FFF9F4;
+  border:1px solid #E5D3C5;
+  border-radius:22px;
+  padding:40px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.05);
+  transition:0.3s ease;
+}
+
+/* TEXT */
+.about-box p{
+  font-size:15px;
+  line-height:1.8;
+  margin-bottom:18px;
+  color:#4A3A3A;
+}
+
+/* FIRST PARAGRAPH STYLE */
+.about-box p:first-child{
+  font-family:'Cormorant Garamond', serif;
+  font-size:20px;
+  font-weight:600;
+  color:#5A4034;
+  line-height:1.8;
+}
+
+/* SIGNATURE */
+.signature{
+  margin-top:25px;
+  text-align:right;
+  font-style:italic;
+  color:#6B4E3D;
+  font-size:14px;
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark{
+  background:#1E1E1E;
+  color:#F5EDE3;
+}
+
+body.dark .about-box{
+  background:#232323;
+  border:1px solid #333;
+}
+
+body.dark .about-box p{
+  color:#E8DDD2;
+}
+
+body.dark .signature{
+  color:#CCCCCC;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="about-box">
+
+  <p>
+    Unsaid by Heart is a full-stack poetry platform where emotions are turned into words and shared through a simple, expressive interface.
+  </p>
+
+  <p>
+    I write here as unsaid.by_heart — a place for the unsaid, where fleeting thoughts and quiet feelings gather.  
+    A space where emotions that often go unspoken are gently held in words — memories, silence, love, and everything in between.  
+    Step in, read slowly, and linger where the words choose to stay.
+  </p>
+
+  <div class="signature">
+    Built by Sambhavi Jha
+  </div>
+
+</div>
+
+<script>
+/* APPLY DARK MODE IF ENABLED */
+if(localStorage.getItem("darkMode") === "enabled"){
+  document.body.classList.add("dark");
+}
+</script>
+
+</body>
+</html>

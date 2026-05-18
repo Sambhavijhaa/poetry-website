@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Unsaid by Heart</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Libre+Baskerville&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Libre Baskerville', serif;
+  background:#F7EDE4;
+  color:#3E2F2F;
+  line-height:1.8;
+  transition:0.3s;
+}
+
+/* HEADER */
+header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:#F7EDE4;
+  border-bottom:1px solid #D8C3A5;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:14px 32px;
+}
+
+/* LEFT */
+.left{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.logo{
+  width:88px;
+  height:88px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid #D8C3A5;
+}
+
+.left h2{
+  font-family:'Cormorant Garamond', serif;
+  font-size:26px;
+  margin-top:6px;
+}
+
+/* RIGHT */
+.right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+#search,#sort{
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #D8C3A5;
+  background:#FFF9F4;
+  outline:none;
+}
+
+#search{ width:200px; }
+
+button{
+  background:#B07D62;
+  color:white;
+  border:none;
+  padding:8px 14px;
+  border-radius:20px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  background:#8C5E58;
+}
+
+/* POEMS */
+#poemsContainer{
+  max-width:800px;
+  margin:40px auto;
+  padding:0 15px;
+}
+
+.poem{
+  background:#FCF7F2;;
+  padding:22px;
+  margin-bottom:20px;
+  border-radius:16px;
+  border:1px solid #E5D3C5;
+}
+
+.poem h2{
+  font-family:'Cormorant Garamond', serif;
+  font-size:28px;
+  margin-bottom:10px;
+}
+
+.poem p{
+  white-space:pre-line;
+  margin-bottom:10px;
+  line-height:2;
+font-size:16px;
+}
+
+/* COMMENT */
+.comment{
+  background:#F8EFE8;
+  padding:10px 14px;
+  border-radius:12px;
+  margin:8px 0;
+  font-size:14px;
+  color:#4A3A3A;
+  border:1px solid #E5D3C5;
+}
+
+.comment-input{
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  margin-bottom:10px;
+
+  border-radius:12px;
+  border:1px solid #D8C3A5;
+
+  background:#FFFDFB;
+  color:#3E2F2F;
+
+  font-family:'Libre Baskerville', serif;
+  outline:none;
+}
+
+.comment-input:focus{
+  border-color:#B07D62;
+  box-shadow:0 0 0 3px rgba(176,125,98,0.12);
+}
+
+/* DARK MODE */
+body.dark{
+  background:#1E1E1E;
+  color:#fff;
+}
+
+body.dark header{
+  background:#1E1E1E;
+}
+
+body.dark .poem{
+  background:#2A2A2A;
+  border-color:#333;
+}
+
+body.dark #search,
+body.dark #sort,
+body.dark .comment{
+  background:#2B2B2B;
+  color:#F5EDE3;
+  border:1px solid #444;
+}
+
+body.dark .comment-input{
+  background:#252525;
+  color:white;
+  border:1px solid #444;
+}
+
+footer{
+  text-align:center;
+  padding:35px 20px 10px;
+  font-size:15px;
+  color:#6B4E3D;
+}
+
+footer a{
+  color:#B07D62;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.social{
+  text-align:center;
+  padding-bottom:45px;
+}
+
+.social a{
+  display:inline-block;
+  margin:0 12px;   /* this gives normal space */
+  text-decoration:none;
+}
+
+.social i{
+  font-size:22px;
+  color:#B07D62;
+  transition:0.3s;
+}
+
+.social i:hover{
+  color:#8C5E58;
+  transform:scale(1.1);
+}
+
+.avatar{
+  width:40px;
+  height:40px;
+
+  border-radius:50%;
+  background:#B07D62;
+  color:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-weight:600;
+  font-size:16px;
+
+  font-family:Arial, sans-serif;
+  text-transform:uppercase;
+
+  box-shadow:0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* DARK MODE SUPPORT */
+body.dark footer{
+  color:#ddd;
+}
+
+body.dark .social i{
+  color:#ddd;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="left">
+    <img src="/images/logo.png" class="logo">
+    <h2>Unsaid by Heart</h2>
+  </div>
+
+  <div class="right">
+
+    <input id="search" placeholder="Search title..." oninput="applyFilters()" />
+
+    <select id="sort" onchange="applyFilters()">
+      <option value="new">Newest</option>
+      <option value="old">Oldest</option>
+    </select>
+
+    <div id="userBox"></div>
+
+    <button onclick="toggleDark()">🌙</button>
+
+  </div>
+
+</header>
+
+<div id="poemsContainer"></div>
+
+<!-- ✅ ADD FOOTER + SOCIAL HERE -->
+<footer>
+  Poetry for the unspoken ·
+  <a href="about.html">About</a>
+</footer>
+
+<div class="social">
+
+  <a href="https://www.linkedin.com/in/sambhavijha" target="_blank">
+    <i class="fab fa-linkedin"></i>
+  </a>
+
+  <a href="mailto:sambhavi.jha10@gmail.com">
+    <i class="fas fa-envelope"></i>
+  </a>
+
+</div>
+
+<script>
+
+const API = "http://localhost:5000/api/poems";
+
+let poems = [];
+
+/* ================= TOKEN HANDLING ================= */
+
+function getToken() {
+  return localStorage.getItem("token");
+}
+
+/* 🔥 NEW FIX: store token from URL after Google login */
+function handleGoogleLoginRedirect() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const tokenFromUrl = urlParams.get("token");
+
+  if (tokenFromUrl) {
+    localStorage.setItem("token", tokenFromUrl);
+
+    // clean URL (important)
+    window.history.replaceState({}, document.title, "/poems.html");
+  }
+}
+
+/* DECODE TOKEN */
+function parseToken(token) {
+  try {
+    return JSON.parse(atob(token.split(".")[1]));
+  } catch {
+    return null;
+  }
+}
+
+/* ================= USER BOX ================= */
+
+function updateUserBox() {
+  const box = document.getElementById("userBox");
+  const token = getToken();
+
+  if (!token) {
+    box.innerHTML = `<button onclick="login()">Login</button>`;
+    return;
+  }
+
+  const data = parseToken(token);
+  const email = data?.email || "";
+  const initial = email ? email.charAt(0).toUpperCase() : "U";
+
+  box.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="avatar">${initial}</div>
+      <button onclick="logout()">Logout</button>
+    </div>
+  `;
+}
+
+/* ================= LOGIN / LOGOUT ================= */
+
+function login() {
+  window.location.href = "http://localhost:5000/auth/google";
+}
+
+function logout() {
+  localStorage.removeItem("token");
+  location.reload();
+}
+
+/* ================= LOAD POEMS ================= */
+
+async function loadPoems() {
+  const res = await fetch(API);
+  poems = await res.json();
+  applyFilters();
+}
+
+/* ================= FILTER ================= */
+
+function applyFilters() {
+  const searchValue = document.getElementById("search").value.toLowerCase().trim();
+  const sortValue = document.getElementById("sort").value;
+
+  let result = [...poems];
+
+  if (searchValue) {
+    result = result.filter(p =>
+      (p.title || "").toLowerCase().includes(searchValue)
+    );
+  }
+
+  result.sort((a, b) => {
+    return sortValue === "new"
+      ? new Date(b.createdAt) - new Date(a.createdAt)
+      : new Date(a.createdAt) - new Date(b.createdAt);
+  });
+
+  render(result);
+}
+
+/* ================= RENDER ================= */
+
+function render(list) {
+  const container = document.getElementById("poemsContainer");
+  container.innerHTML = "";
+
+  const token = getToken();
+  const userId = parseToken(token)?.id;
+
+  list.forEach(p => {
+
+    const isLiked =
+     p.likes?.some(
+     u => String(u._id || u)
+     === String(userId)
+    );
+
+    container.innerHTML += `
+      <div class="poem">
+
+        <h2>${escapeHTML(p.title)}</h2>
+        <p>${escapeHTML(p.content)}</p>
+
+        <button onclick="likePoem('${p._id}')">
+          ${isLiked ? "💔 Unlike" : "❤️ Like"} (${p.likes?.length || 0})
+        </button>
+
+        <div style="margin-top:10px;">
+
+          ${p.comments?.map(c => `
+            <div class="comment">
+              <b>${(c.user && typeof c.user === "object")
+                ? (c.user.name || c.user.email)
+                : "User"}:</b>
+              ${escapeHTML(c.text)}
+            </div>
+          `).join("") || ""}
+
+          <input class="comment-input" id="c-${p._id}" placeholder="Add comment">
+          <button onclick="addComment('${p._id}')">Comment</button>
+        </div>
+
+      </div>
+    `;
+  });
+}
+
+/* ================= LIKE ================= */
+
+async function likePoem(id) {
+  const token = getToken();
+  if (!token) return alert("Login required");
+
+  const res = await fetch(`${API}/${id}/like`, {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    alert(err.message || "Like failed");
+    return;
+  }
+
+  loadPoems();
+
+  if (localStorage.getItem("darkMode") === "enabled") {
+   document.body.classList.add("dark");
+  }
+}
+
+/* ================= COMMENT ================= */
+
+async function addComment(id) {
+  const token = getToken();
+  if (!token) return alert("Login required");
+
+  const input = document.getElementById("c-" + id);
+  if (!input.value.trim()) return;
+
+  const res = await fetch(`${API}/${id}/comment`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({ text: input.value })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    alert(err.message || "Comment failed");
+    return;
+  }
+
+  input.value = "";
+  loadPoems();
+}
+
+/* ================= ESCAPE ================= */
+
+function escapeHTML(str = "") {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function toggleDark() {
+  document.body.classList.toggle("dark");
+
+  if (document.body.classList.contains("dark")) {
+    localStorage.setItem("darkMode", "enabled");
+  } else {
+    localStorage.removeItem("darkMode");
+  }
+}
+
+/* ================= INIT ================= */
+
+handleGoogleLoginRedirect();  // 🔥 IMPORTANT FIX
+updateUserBox();
+loadPoems();
+
+</script>
+
+</body>
+</html>
