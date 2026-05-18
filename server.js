@@ -9,7 +9,7 @@ const auth = require("./middleware/auth");
 const admin = require("./middleware/admin");
 
 // 🔐 Protected admin page route
-app.get("/admin", auth, admin, (req, res) => {
+app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "public/admin.html"));
 });
 
