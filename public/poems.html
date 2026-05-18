@@ -251,42 +251,43 @@ body.dark .social i{
 
 @media screen and (max-width: 768px){
 
+  /* keep layout SAME as desktop */
   header{
-    flex-direction:column;
-    gap:15px;
-    padding:18px;
-    text-align:center;
+    padding:14px 18px;
   }
 
   .right{
-    flex-wrap:wrap;
-    justify-content:center;
+    gap:10px;
   }
 
+  /* just scale inputs slightly */
   #search{
-    width:100%;
+    width:160px;
   }
 
   #sort{
-    width:100%;
+    width:140px;
   }
 
+  /* logo smaller but same layout */
   .logo{
-    width:70px;
-    height:70px;
+    width:60px;
+    height:60px;
   }
 
   .left h2{
-    font-size:22px;
+    font-size:20px;
   }
 
+  /* main container same look */
   #poemsContainer{
-    margin:20px auto;
-    padding:0 12px;
+    margin:30px auto;
+    padding:0 15px;
   }
 
+  /* keep poem same structure */
   .poem{
-    padding:18px;
+    padding:20px;
   }
 
   .poem h2{
@@ -296,13 +297,26 @@ body.dark .social i{
   .poem p{
     font-size:15px;
     line-height:1.8;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
+  /* IMPORTANT: DO NOT stretch buttons */
   button{
-    width:100%;
-    margin-top:8px;
+    width:auto;
   }
 
+  /* keep avatar same */
+  .avatar{
+    width:38px;
+    height:38px;
+    font-size:14px;
+  }
+
+  /* prevent horizontal scroll */
+  body{
+    overflow-x:hidden;
+  }
 }
 
 </style>
