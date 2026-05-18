@@ -1,4 +1,4 @@
-# Unsaid by Heart – Poetry Sharing Platform 💙
+# Unsaid by Heart – Poetry Web App 💙
 
 ## 📌 Project Overview
 Unsaid by Heart is a full-stack poetry sharing platform where users can explore, search, like, and comment on poems. The platform also includes an admin panel where poems are created and managed.
