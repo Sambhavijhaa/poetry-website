@@ -249,33 +249,103 @@ body.dark .social i{
 
 /* MOBILE RESPONSIVE */
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
 
-  /* CENTER WHOLE PAGE CONTENT */
   body{
+    padding: 10px;
+    overflow-x: hidden;
+  }
+
+  /* HEADER becomes vertical app-style */
+  header{
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .left{
+    align-items: center;
     text-align: center;
   }
 
-  #poemsContainer{
-    margin: 30px auto;
-    max-width: 800px;
+  .logo{
+    width: 55px;
+    height: 55px;
+  }
+
+  .left h2{
+    font-size: 20px;
+  }
+
+  /* RIGHT SECTION STACKS LIKE APP CONTROLS */
+  .right{
+    flex-direction: column;
     width: 100%;
+    gap: 8px;
+  }
+
+  #search, #sort{
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .right button{
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  /* POEMS SECTION */
+  #poemsContainer{
+    width: 100%;
+    margin: 20px auto;
+    padding: 0;
   }
 
   .poem{
-    margin-left: auto;
-    margin-right: auto;
-    text-align: left; /* keep poem text readable */
+    padding: 14px;
+    margin-bottom: 14px;
+    border-radius: 12px;
   }
 
+  .poem h2{
+    font-size: 20px;
+  }
+
+  .poem p{
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* BUTTONS INSIDE POEM */
+  .poem button{
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  /* COMMENTS */
+  .comment-input{
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .comment{
+    font-size: 13px;
+  }
+
+  /* FOOTER */
   footer{
-    text-align: center;
-    width: 100%;
+    font-size: 13px;
+    padding: 20px 10px;
   }
 
-  .social{
-    text-align: center;
-    width: 100%;
+  .social i{
+    font-size: 18px;
   }
 }
 
