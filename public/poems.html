@@ -279,23 +279,55 @@ body.dark .social i{
   }
 
   /* RIGHT SECTION STACKS LIKE APP CONTROLS */
-  .right{
-    flex-direction: column;
-    width: 100%;
-    gap: 8px;
-  }
+  /* RIGHT SECTION FIX */
+.right{
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+}
 
-  #search, #sort{
-    width: 100%;
-    font-size: 14px;
-    padding: 10px;
-  }
+/* search + sort full width */
+#search, #sort{
+  width: 100%;
+  font-size: 14px;
+  padding: 10px;
+}
 
-  .right button{
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-  }
+/* ❌ REMOVE THIS OLD RULE */
+/* .right button { width: 100%; } */
+
+/* ✅ MAKE ONLY POEM BUTTONS FULL WIDTH */
+.poem button{
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  font-size: 14px;
+}
+
+/* ⭐ NEW: LOGIN + DARK MODE INLINE ROW */
+#userBox{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* login button small */
+#userBox button{
+  width: auto;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 16px;
+}
+
+/* dark mode button small circle */
+.right > button{
+  width: 34px !important;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 14px;
+}
 
   /* POEMS SECTION */
   #poemsContainer{
