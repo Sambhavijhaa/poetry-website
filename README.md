@@ -24,7 +24,7 @@ It is designed to create a simple and emotional space for expressing thoughts th
 - Delete inappropriate comments
 - Moderate and manage content
 - Monitor platform activity
-- 
+  
 ## 🧠 Tech Stack
 - Frontend: HTML, CSS, JavaScript
 - Backend: Node.js, Express.js
